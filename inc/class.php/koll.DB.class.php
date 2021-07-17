@@ -212,7 +212,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	{ $SQL = "SELECT * FROM SPLIT WHERE courseID = ". $liste[ 'courseID' ];
 		$result = $this   -> db -> query( $SQL );
 		$split  = $result -> fetchArray();
-		if ( $split[ 0 ] )
+		if (  isset($split[ 0 ]) && $split[ 0 ] )
 		{	return $split[ 0 ];
 		}
 		else // DB Eintrag besteht noch nocht (z.B init in neuem LR)
