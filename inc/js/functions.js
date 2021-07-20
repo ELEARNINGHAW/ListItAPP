@@ -30,7 +30,7 @@
 
 		$( "#aktiv" ).button( "option", "label", newlabel );
         $( "#aktiv" ).val(newVal);
-/*        $('#aktivlabel').addClass( newButtonColor );*/
+        $('#aktivlabel').addClass( newButtonColor );
 
 	}	
 

@@ -34,4 +34,4 @@ input#userbutton  {  font-size:13px;  padding: 10px;   cursor: pointer; }
 }
 
 .buttonOFF  {color:#FFFFFF;background-color:#a0a0a0 }
-.buttonON {color:#000000;color:#FFFFFF;}
+.buttonON {color:#000000;}
