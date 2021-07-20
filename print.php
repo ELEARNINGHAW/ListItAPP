@@ -14,7 +14,7 @@ $error 			= $Li -> checkHost(); 												// -- Zugriff auf diese Seite nur vo
 $user			  = $Li -> decodeAuthData();											//
 
 $listen			= $db -> getListenData( $Li   );			// -- Array mit allen Kolloquien mit Status 'online'
-#deb($listen);
+
 foreach ( $listen as $liste )
 {
 	if ( $liste[ 'listID' ] == $_GET[ 'ID' ] )

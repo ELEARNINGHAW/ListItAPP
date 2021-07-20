@@ -144,11 +144,11 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	function getListenData(  $Li   )
 	{
     $liste = $_SESSION[ 'currentList' ];
-
+ 
     $listen[ 0 ] = $_SESSION[ 'stdlst' ];
     
     $SQL 	= "SELECT * FROM LISTEN WHERE courseID = ".$liste[ 'courseID' ]." ORDER by USdatum DESC";
-    
+ 
     $result =  $this -> db -> query( $SQL );
  
 		while ( $liste = $result -> fetchArray() )										// Daten zeilenweise in Array speichern
@@ -172,7 +172,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
       $listen[ $i ][ 'startZeit2'	]	= preg_replace( '#:#' , '', $liste[ 'startZeit' 	] ); // Zeit ohne ":" -- "10:20" wird zu "1020"
  			$listen[ $i ][ 'endeZeit2'  ]	= preg_replace( '#:#' , '', $liste[ 'endeZeit' 	] );
 		}
-
+  
 		return $listen;
 	}
 
@@ -209,16 +209,20 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 
   
   function ifSplit( $liste  )
-	{ $SQL = "SELECT * FROM SPLIT WHERE courseID = ". $liste[ 'courseID' ];
-		$result = $this   -> db -> query( $SQL );
-		$split  = $result -> fetchArray();
-		if (  isset($split[ 0 ]) && $split[ 0 ] )
-		{	return $split[ 0 ];
-		}
-		else // DB Eintrag besteht noch nocht (z.B init in neuem LR)
-		{	$SQL ="INSERT INTO SPLIT ( split, courseID ) VALUES ( \"true\", ".$liste[ 'courseID' ].")";
-			$this -> db -> exec( $SQL );
-		}
+	{
+	  if (isset( $liste[ 'courseID' ] ) )
+    {
+      $SQL = "SELECT * FROM SPLIT WHERE courseID = ". $liste[ 'courseID' ];
+      $result = $this   -> db -> query( $SQL );
+      $split  = $result -> fetchArray();
+      if (  isset($split[ 0 ]) && $split[ 0 ] )
+      {	return $split[ 0 ];
+      }
+      else // DB Eintrag besteht noch nocht (z.B init in neuem LR)
+      {	$SQL ="INSERT INTO SPLIT ( split, courseID ) VALUES ( \"true\", ".$liste[ 'courseID' ].")";
+        $this -> db -> exec( $SQL );
+      }
+    }
 	}
 
 	function updateIfSplit( $liste )			// Wenn Daten kommen, speicher in Datenbank
