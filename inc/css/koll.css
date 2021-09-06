@@ -1,5 +1,5 @@
 .menuItem0a , .menuItem0b,  .menuItem0c { height: 40px; font-size:13px; color:#111111; text-align:center; padding: 10px;   }
-.menuItem0a  { background-color:red;   color: #FFFFFF;  }
+.menuItem0a  { background-color:red;   color: #FFFFFF; line-height: 1.0; }
 .menuItem0b  { background-color:green; color: #FFFFFF;  }
 .menuItem0c  { background-color:white; color: #FFFFFF;  }
 
@@ -33,5 +33,19 @@ input#userbutton  {  font-size:13px;  padding: 10px;   cursor: pointer; }
     font-weight: bold;
 }
 
-.buttonOFF  {color:#FFFFFF;background-color:#a0a0a0 }
-.buttonON {color:#000000;}
+.buttonOFF  {color:#000000;background-color:#a0a0a0 }
+.buttonON   {color:#FFFFFF;background-color:green}
+
+input.date {width: 110px;height: 25px;font-size: 18px;}
+input.title {width: 100%;height: 25px;font-size: 18px;}
+
+.butt, .buttX  {width: 80px;height: 20px;font-size: 13px; padding:0px; padding-top:5px; text-align: center; alignment: center; float: right; }
+.buttX { visibility: hidden; }
+
+.buttL0, .buttL1  {  font-weight: 700;  width: 80px;height: 20px;font-size: 13px; padding:0px;text-align: center; alignment: center; float: right; }
+.buttL1 { width: 60px; }
+.buttL0 { width: 60px; }
+
+td.ulT { vertical-align: top; width:50px; }
+td.ulNr{ width:25px;  }
+td.ulNa{ width:450px;}

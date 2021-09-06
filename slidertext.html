@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ListIt</title>
+<link rel="stylesheet"  type="text/css"	 href="inc/css/jquery.ui.all.css"	/>
+<link rel="stylesheet"  type="text/css"	 href="inc/css/demos.css"			/>
+<link rel="stylesheet"  type="text/css"	 href="inc/css/jquery-ui.css">
+<link rel="stylesheet"  type="text/css"  href="inc/css/koll.css" />
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+<!--
+<script type="text/javascript"	src="inc/js/lib.js" ></script>
+<script type="text/javascript"  src="inc/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript"	src="inc/js/functions.js"></script>
+
+ script type="text/javascript"	src="inc/js/jquery-1.4.2.js"></script>
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.core.js"></script>
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.datepicker.js"></script>
+
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.mouse.js"></script>
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.slider.js"></script>
+<script type="text/javascript"	src="inc/js/ui/jquery.ui.button.js"></script>
+<script type="text/javascript"  src="inc/js/ui/jquery.ui.checkbox.js"></script>
+-->
+
+</head>
+<body>
+
+
+<div>
+	<input type="text" name="range_example_2_start" id="range_example_2_start" value="1.1.2011" class="hasDatepicker"> 
+    <input type="text" name="range_example_2_end" id="range_example_2_end" value="0" class="hasDatepicker">
+</div>
+
+
+<script type="text/javascript" src="inc/js/jquery-ui-timepicker-addon.js"></script>
+
+<script type="text/javascript">
+function submitsplit() { document.forms.form2.submit(); }
+function submitkoll()  { //document.forms.form.submit();
+}
+
+$(function() {
+var startDateTextBox = $("#range_example_2_start");
+var endDateTextBox = $("#range_example_2_end");
+
+$.timepicker.dateRange(
+	startDateTextBox,
+	endDateTextBox,
+	{
+		minInterval: (1000*60*60*24*4), // 4 days
+		maxInterval: (1000*60*60*24*8), // 8 days
+		start: {}, // start picker options
+		end: {} // end picker options
+	}
+);
+
+
+});
+
+
+
+</script>
+
+
+</body>
+</html>

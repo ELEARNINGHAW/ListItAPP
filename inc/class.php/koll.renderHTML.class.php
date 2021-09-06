@@ -1,113 +1,121 @@
 <?php
 class RenderHTML
 {
- 
-	function createUserListe( $liste, $enable = true, $printVersion = false )
-	{
-    $user =  $_SESSION[ 'currentUser' ];
+	function createUserListe( $liste, $enable = true, $printVersion = false, $anonymState = 2)
+	{ $user = $_SESSION[ 'currentUser' ];
+   
+    if      ( $anonymState == 2 ) { $setAnonym = $liste[ 'anonymL' ]; }
+    else if ( $anonymState == 0 ) { $setAnonym = false;               }
+    else                          { $setAnonym = true;                }
     
-    if(!isset($liste[ 'infoTxt' ] ))
-    {$liste[ 'infoTxt' ]  = '';}
+    if( !isset( $liste[ 'infoTxt' ] ) )
+    { $liste[ 'infoTxt' ]  = ''; }
    
 		if ( $printVersion )
-		{
-			$style = 'float:left; border:0px solid black; width:700px; padding:25px; margin:25px;';
-			$tabstyle = 'float:left; width:300px;  border:1px solid black;margin:5px; padding-bottom:10px;  ';
+		{	$style = 'float:left; border:0px solid black; width:700px; padding:25px; margin:25px;';
+			$tabstyle = ' width:100%;  border:1px solid black;margin:5px; ';
 		}
 		else
-		{
-			$style = 'float:left; border:1px solid black; width:300px; padding:10px; margin:10px;';
-			$tabstyle = 'float:left; width:300px';
+		{ $style = 'float:left; border:1px solid black;  min-width: 350px; height: available; width:25%; padding:10px; margin:10px;';
+			$tabstyle = ' width:100%';
 		}
 		
 		$kl = '<div style="'.$style.'">';
-    
     $kl .= '<div class="menuItem1">'. $liste[ 'kollHead' ] .'</div> ';
-    
-    
     $kl .= '<div class="menuItem0">'. $liste[ 'infoTxt' ] .'</div> ';
 
 		if ( $enable )
-		{
-   		if ( $liste[ 'editable' ]  )
+		{	if ( $liste[ 'activeL' ]  )
 			{	$kl .= $this->renderInsertDeleteButton( $liste );
 			}
     }
+		
 		elseif (!$printVersion)
     {	$kl .= $this->renderClosedButton( $liste );
     }
-		#	$kl .= '<br /> ';
+     
       $kl .= '<div class="menuItem3">'. $liste[ 'kollInfo' ].'</div>';
-			$kl .= '<div class="menuItem2">'. $liste[ 'datum' 	 ] .' &nbsp; &nbsp; &nbsp;  '. $liste[ 'startZeit' ] .'&nbsp;-&nbsp;'. $liste[ 'endeZeit' ] .' </div>';
+			$kl .= '<div class="menuItem2">'. $liste[ 'datum' 	 ][ 'd1' ] .' &nbsp; &nbsp; &nbsp;  '. $liste[ 'startZeit' ] .'&nbsp;-&nbsp;'. $liste[ 'endeZeit' ] .' </div>';
 			
 	  	$counter = 0;
  
-		  for ( $i = 0; $i < $liste[ 'anzSlots' ]; $i++ )
-  		{
-  		  if ( isset ( $liste[ 'timeline' ][ $i ] ) ) { $tl =  $liste[ 'timeline' ][ $i ]; }
+		  for ( $i = 1; $i <= $liste[ 'anzSlots' ]; $i++ )
+  		{ if ( isset ( $liste[ 'timeline' ][ $i ] ) ) { $tl =  $liste[ 'timeline' ][ $i ]; }
   		  else                                        { $tl = ''; }
 			  
-        $kl .='
-        <table style="'.$tabstyle.'">
-        <tr>
-        <th width="75"  rowspan="'.( $liste[ 'anzStudis' ] + 1 ) .'" scope="col">' . $tl. '</th>
-        <th width="25"  scope="col">&nbsp;</th>
-        <th width="500" scope="col">&nbsp;</th>
-        </tr>';
-		  
-      #    print_r($koll);
-	  	for ($j = 0; $j < $liste['anzStudis']; $j++ )
-			{
-        $studiname = ( ( isset( $liste['studiListe'][$counter]['firstname']) AND isset( $liste['studiListe'][$counter]['lastname'] ) ) ) ?   $liste['studiListe'][$counter]['firstname'] .' '. $liste['studiListe'][$counter]['lastname'] : '';
-        $kl .= '<tr><td style="padding-left:10px">'. ($counter+1) .'</td><td  style="padding-left:10px">' . $studiname.	 '</td> </tr>';
+        $kl .='<table style="'.$tabstyle.'">';
+       
+	  	  for ($j = 0; $j < $liste['anzStudis']; $j++ )
+	  	  { $lastname = '';
+          $firstname = '';
+
+        if (isset($liste['studiListe'][$counter]))
+        { $cuser = $liste['studiListe'][$counter];
+          if ($user[ 'userKennung' ] == $cuser['kennung']) {$isCuser = true;} else {$isCuser = false;}
+          if   ($setAnonym AND !$isCuser )
+          { $frnd = rand(3, 7 ); for ($x = 0; $x < $frnd; $x++) { $firstname .= 'x'; }
+            $lrnd = rand(4, 10); for ($x = 0; $x < $lrnd; $x++) { $lastname  .= 'x'; }
+          }
+          else
+          { $firstname = ($cuser['firstname']);
+            $lastname = ($cuser['lastname']);
+          }
+        }
+        $studiname =  $firstname. ' '. $lastname;
+        
+        if ($j == 0)
+        { $kl .= '<tr><td class="ulT" rowspan="' . ($liste['anzStudis'] ) . '" >' . $tl . '</td>
+                      <td class="ulNr" >' . $counter +1  . '</td>
+                      <td class="ulNa" >' . $studiname   . '</td></tr>';
+        }
+        else
+        { $kl .= '<tr><td  class="ulNr"> '. $counter +1 . '</td><td class="ulNa" >' . $studiname . '</td> </tr>';
+        }
 		    $counter++;
 			}
 		  $kl .= '</table>';
 	  }
-	
-	  $kl .= '<a class="printer"  target="_blank" style="float:right;border:0;" href="print.php?ID='.$liste['listID'].'"><img border="0" src="inc/img/drucker.gif" /></a>';
-	  $kl .= '</div>';
-	  return  $kl;
+		if( !$setAnonym )
+    { $h   = hash('sha256',  $liste['listID'].$_SESSION[' salt' ]) ;
+      $kl .= '<a class="printer"  target="_blank" style="float:right;border:0;"                  href="tools.php?a=1&ID='.$liste['listID'].'&h='.$h.'"><img src="inc/img/drucker.gif" /></a>';
+      $kl .= '<a class="printer"  target="_blank" style="float:right;border:0; margin-right:5px" href="tools.php?a=2&ID='.$liste['listID'].'&h='.$h.'"><img src="inc/img/csv.png" /></a>';
+    }
+      $kl .= '</div>';
+	   return  $kl;
 	}
 
-	function renderInsertDeleteButton($liste )
+	function renderInsertDeleteButton( $liste )
 	{  	$button = '<form action="./index.php" method="post" name="xform">';
     
     if(  isset ($liste[ 'studiIsInList' ]) && $liste[ 'studiIsInList' ] )
-		{
-			$button .= '<input  style="width:300px; heigth:50px  text-align:center; background-color: #770000; font-size:1.2em; font-weight:bold; color:#FFF" type="submit" name="userbutton" value="Aus dieser Liste austragen" id="userbutton" />';
+		{  $button .= '<input  style="width:100%; heigth:50px  text-align:center; background-color: #770000; font-size:1.2em; font-weight:bold; color:#FFF" type="submit" name="userbutton" value="Aus dieser Liste austragen" id="userbutton" />';
 		}
 		else
-		{
-			$button .= '<input   style="width:300px; heigth:50px text-align:center; background-color: #007700; font-size:1.2em; font-weight:bold;  color:#FFF "  type="submit" name="userbutton" value="In diese Liste eintragen" id="userbutton" />';
+		{	$button .= '<input   style="width:100%; heigth:50px text-align:center; background-color: #007700; font-size:1.2em; font-weight:bold;  color:#FFF "  type="submit" name="userbutton" value="In diese Liste eintragen" id="userbutton" />';
 		}
 		$button .= '<input type="hidden" name="listID" value="'.$liste['listID'].'"/></form>';
 		return $button;
 	}
 
 	function getListenListeHTML( $listen, $currListe , $split  ) /* kleines Menu mit Auswahlliste aller Kolls  (oben rechts) */
-	{
-    $checkedTrue = '';
+	{ $checkedTrue  = '';
     $checkedFalse = '';
     if ( $split == 'true') { $checkedTrue  = 'checked = "checked"'; }
 	  else                   { $checkedFalse = 'checked = "checked"'; }
-    $tmp = '<div style="position:absolute; top:10px; left:600px; width:400px; height: 425px; background-color:#eee; overflow:auto">';
 	 
-		$tmp .= '<form action="./index2.php" method="post" name="form2">
-		<input type="radio" '.$checkedTrue.'  name="split" id="split" value="true"  onchange="submitsplit();"/>Split Mode ein &nbsp;&nbsp; 
-		<input type="radio" '.$checkedFalse.' name="split" id="split" value="false" onchange="submitsplit();"/>Split Mode aus</br>
+		$tmp  = '<form action="./index.php" method="post" name="form2">
+		<input type="radio" '.$checkedTrue.'  name="split" id="split" value="true"  onchange="submitsplit();"/>Single Mode ein &nbsp;&nbsp;
+		<input type="radio" '.$checkedFalse.' name="split" id="split" value="false" onchange="submitsplit();"/>Single Mode aus</br>
 		<input type="hidden" name="ID" id="ID" value="'.$currListe[ 'listID' ].'"/>
     </form>';
 
 		$tmp .= '<hr /><table width="100%;">';
 		$i = 1;
-	
+	   
     foreach ($listen as $liste )
-		{
-      if (  $liste['listID']  != 0)
+		{ if (  $liste['listID']  != 0)
       {
-		  #$online = '';
-      { if( $liste['aktiv'] == "online" )
+        { if( $liste['visibleA'] == "online" )
 			{ #$online = "background:#FFF";
 			}
 		
@@ -121,15 +129,15 @@ class RenderHTML
 			}
 			$tmp .= '<tr><td class="koll ' .$st2. ' ">'
 			  .'<a class="koll" href="?listID=' .$liste['listID']. '">'
-        .$_SESSION[ 'svg' ][ 'lock'    ][$liste['editable']]. ' '
-        .$_SESSION[ 'svg' ][ 'visible' ][$liste['aktiv'   ]]. ' '
-        .$liste[ 'datum' ].' '.$liste['kollHead'].'</td></a></tr>';
+        ."<img  style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'anonym'  ][$liste['anonymL'  ]]. "\"  />"
+        ."<img  style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'lock'    ][$liste['activeL'  ]]. "\"  />"
+        ."<img  style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'visible' ][$liste['visibleL' ]]. "\"  />"
+        .$liste[ 'datum' ][ 'd1' ].' '.$liste['kollHead'].'</td></a></tr>';
       }
       }
     }
     
-		$tmp .= '</table>
-		</div>';
+		$tmp .= '</table>';
 		return $tmp;
 	}
 
