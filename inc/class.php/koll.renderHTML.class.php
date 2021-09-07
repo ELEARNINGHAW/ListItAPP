@@ -33,7 +33,6 @@ class RenderHTML
 		elseif (!$printVersion)
     {	$kl .= $this->renderClosedButton( $liste );
     }
-     
       $kl .= '<div class="menuItem3">'. $liste[ 'kollInfo' ].'</div>';
 			$kl .= '<div class="menuItem2">'. $liste[ 'datum' 	 ][ 'd1' ] .' &nbsp; &nbsp; &nbsp;  '. $liste[ 'startZeit' ] .'&nbsp;-&nbsp;'. $liste[ 'endeZeit' ] .' </div>';
 			
@@ -46,7 +45,7 @@ class RenderHTML
         $kl .='<table style="'.$tabstyle.'">';
        
 	  	  for ($j = 0; $j < $liste['anzStudis']; $j++ )
-	  	  { $lastname = '';
+	  	  { $lastname  = '';
           $firstname = '';
 
         if (isset($liste['studiListe'][$counter]))
