@@ -13,7 +13,7 @@ class RenderHTML
    
 		if ( $printVersion )
 		{	$style = 'float:left; border:0px solid black; width:700px; padding:25px; margin:25px;';
-			$tabstyle = ' width:100%;  border:1px solid black;margin:5px; ';
+			$tabstyle = ' width:100%;  border:1px solid black;margin:5px;';
 		}
 		else
 		{ $style = 'float:left; border:1px solid black;  min-width: 350px; height: available; width:25%; padding:10px; margin:10px;';
