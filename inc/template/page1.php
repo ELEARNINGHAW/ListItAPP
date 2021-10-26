@@ -38,18 +38,12 @@ $(function() {
 
     $( ".butt1" ).checkboxradio({ icon: false });
     $( "#datum" ).datepicker( { 	dateFormat: 'dd M yy', }  );
-    
-    //  var activeDateStart = $( '#activeT_start' );
-    //  var activeDateEnd   = $( '#activeT_end'   );
+ 
     $( "#activeT_start" ).datepicker( { dateFormat: 'dd M yy',   onClose: function( ) { setAAnAus(1); } } );
     $( "#activeT_end"   ).datepicker( {	dateFormat: 'dd M yy',   onClose: function( ) { setAAnAus(2); } } );
-    
-    //  var visibleDateStart = $( '#visibleT_start' );
-    //  var visibleDateEnd   = $( '#visibleT_end'   );
+ 
     $( "#visibleT_start" ).datepicker( { dateFormat: 'dd M yy', onClose: function( )  { setVAnAus(1); } } );
     $( "#visibleT_end"   ).datepicker( { dateFormat: 'dd M yy', onClose: function( )  { setVAnAus(2); } } );
-    
-
     
     $("#slideranzSlots").slider({
         value:#anzSlots#,

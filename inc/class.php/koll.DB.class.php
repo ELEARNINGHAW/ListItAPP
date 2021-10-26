@@ -14,7 +14,11 @@ class KollDB
 	}
   
   function getListID( $liste )
-  { $SQL = "
+  {
+    $liste[ 'now'      ] = $this -> chkr( $liste[ 'now'      ] );
+    $liste[ 'courseID' ] = $this -> chkr( $liste[ 'courseID' ] );
+    
+    $SQL = "
 		SELECT listID FROM LISTEN
 		WHERE lastchanged == '". $liste[ 'now' ] ."' AND courseID == '". $liste[ 'courseID' ]."'";
   
@@ -48,71 +52,67 @@ class KollDB
     ,visibleT_end
 		)
 		VALUES
-		(\"".$liste[ 'datum'         ]['ep']  ."\"
-		,\"".$liste[ 'kollHead'      ]        ."\"
-		,\"".$liste[ 'kollInfo'      ]        ."\"
-		,\"".$liste[ 'anzSlots'      ]        ."\"
-		,\"".$liste[ 'slotDauer'     ]        ."\"
-		,\"".$liste[ 'startZeit'     ]        ."\"
-		,\"".$liste[ 'endeZeit'      ]        ."\"
-		,\"".$liste[ 'anzStudis'     ]        ."\"
-		,\"".$liste[ 'courseID'      ]        ."\"
-		,\"".$liste[ 'now'           ]        ."\"
-		,\"".$liste[ 'visibleT'      ]        ."\"
-		,\"".$liste[ 'activeT'       ]        ."\"
-		,\"".$liste[ 'visibleA'      ]        ."\"
-		,\"".$liste[ 'activeA'       ]        ."\"
-		,\"".$liste[ 'anonymA'       ]        ."\"
-		,\"".$liste[ 'activeT_start'  ]['ep'] ."\"
-		,\"".$liste[ 'activeT_end'    ]['ep'] ."\"
-		,\"".$liste[ 'visibleT_start' ]['ep'] ."\"
-		,\"".$liste[ 'visibleT_end'   ]['ep'] ."\"
+		(\"".$this -> chkr( $liste[ 'datum'         ]['ep']  ) ."\"
+		,\"".$this -> chkr( $liste[ 'kollHead'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'kollInfo'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'anzSlots'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'slotDauer'     ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'startZeit'     ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'endeZeit'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'anzStudis'     ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'courseID'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'now'           ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'visibleT'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'activeT'       ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'visibleA'      ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'activeA'       ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'anonymA'       ]        ) ."\"
+		,\"".$this -> chkr( $liste[ 'activeT_start'  ]['ep'] ) ."\"
+		,\"".$this -> chkr( $liste[ 'activeT_end'    ]['ep'] ) ."\"
+		,\"".$this -> chkr( $liste[ 'visibleT_start' ]['ep'] ) ."\"
+		,\"".$this -> chkr( $liste[ 'visibleT_end'   ]['ep'] ) ."\"
 		)
 		";
- 
+ #deb($SQL,1);
    $this -> db -> exec( $SQL );
    return $this -> getListID( $liste );
 	}
 
-	function updateListInDB( $liste, $user )			// Wenn Daten kommen, speicher in Datenbank
+	function updateListInDB( $liste, $user )
 	{  $SQL =	"UPDATE LISTEN SET ";
      $SQL .=	"lastchanged   =	 strftime('%Y-%m-%d %H-%M-%S','now' )";
 
-	if ( isset( $liste[ 'datum'		       ][ 'ep' ] ) ) {$SQL .=	" ,datum		     =	\"".$this->chkr( $liste[ 'datum'		      ][ 'ep' ]	)."\"" ; }
-  if ( isset( $liste[ 'activeT_start'  ][ 'ep' ] ) ) {$SQL .=	"	,activeT_start =	\"".$this->chkr( $liste[ 'activeT_start'  ][ 'ep' ]	)."\"" ; }
-	if ( isset( $liste[ 'activeT_end'	   ][ 'ep' ] ) ) {$SQL .=	"	,activeT_end	 =	\"".$this->chkr( $liste[ 'activeT_end'	  ][ 'ep' ]	)."\"" ; }
-	if ( isset( $liste[ 'visibleT_start' ][ 'ep' ] ) ) {$SQL .=	"	,visibleT_start=	\"".$this->chkr( $liste[ 'visibleT_start' ][ 'ep' ]	)."\"" ; }
-	if ( isset( $liste[ 'visibleT_end'   ][ 'ep' ] ) ) {$SQL .=	"	,visibleT_end	 =	\"".$this->chkr( $liste[ 'visibleT_end'   ][ 'ep' ]	)."\"" ; }
-  if ( isset( $liste[ 'visibleT'	             ] ) ) {$SQL .=	"	,visibleT	   	 =	\"".$this->chkr( $liste[ 'visibleT'	             ]	)."\"" ; }
-  if ( isset( $liste[ 'activeT'	               ] ) ) {$SQL .=	"	,activeT	     =	\"".$this->chkr( $liste[ 'activeT'	             ]	)."\"" ; }
-  if ( isset( $liste[ 'visibleA'	             ] ) ) {$SQL .=	"	,visibleA	   	 =	\"".$this->chkr( $liste[ 'visibleA'	             ]	)."\"" ; }
-  if ( isset( $liste[ 'activeA'	               ] ) ) {$SQL .=	"	,activeA       =	\"".$this->chkr( $liste[ 'activeA'	             ]	)."\"" ; }
-  if ( isset( $liste[ 'anonymA'	               ] ) ) {$SQL .=	"	,anonymA       =	\"".$this->chkr( $liste[ 'anonymA'	             ]	)."\"" ; }
-	if ( isset( $liste[ 'kollHead'	             ] ) ) {$SQL .=	"	,kollHead	     =	\"".$this->chkr( $liste[ 'kollHead'	             ]	)."\"" ; }
-	if ( isset( $liste[ 'kollInfo'	             ] ) ) {$SQL .=	"	,kollInfo	     =	\"".$this->chkr( $liste[ 'kollInfo'	             ]	)."\"" ; }
-	if ( isset( $liste[ 'anzSlots'	             ] ) ) {$SQL .=	"	,anzSlots	     =	\"".$this->chkr( $liste[ 'anzSlots'	             ]	)."\"" ; }
-	if ( isset( $liste[ 'slotDauer'	             ] ) ) {$SQL .=	"	,slotDauer	   =	\"".$this->chkr( $liste[ 'slotDauer'	           ]	)."\"" ; }
-	if ( isset( $liste[ 'startZeit'	             ] ) ) {$SQL .=	"	,startZeit	   =	\"".$this->chkr( $liste[ 'startZeit'	           ]	)."\"" ; }
-	if ( isset( $liste[ 'endeZeit'	             ] ) ) {$SQL .=	"	,endeZeit	     =	\"".$this->chkr( $liste[ 'endeZeit'	             ]	)."\"" ; }
-	if ( isset( $liste[ 'anzStudis'	             ] ) ) {$SQL .=	"	,anzStudis  	 =	\"".$this->chkr( $liste[ 'anzStudis'	           ]	)."\"" ; }
-                                                     $SQL .=	"	WHERE listID   =	\"".$this->chkr( $liste[ 'listID'                ]	)."\"" ;
-# deb($SQL,1);
+	if ( isset( $liste[ 'datum'		       ][ 'ep' ] ) ) {$SQL .=	" ,datum		     =	\"".$this -> chkr( $liste[ 'datum'		      ][ 'ep' ]	)."\"" ; }
+  if ( isset( $liste[ 'activeT_start'  ][ 'ep' ] ) ) {$SQL .=	"	,activeT_start =	\"".$this -> chkr( $liste[ 'activeT_start'  ][ 'ep' ]	)."\"" ; }
+	if ( isset( $liste[ 'activeT_end'	   ][ 'ep' ] ) ) {$SQL .=	"	,activeT_end	 =	\"".$this -> chkr( $liste[ 'activeT_end'	  ][ 'ep' ]	)."\"" ; }
+	if ( isset( $liste[ 'visibleT_start' ][ 'ep' ] ) ) {$SQL .=	"	,visibleT_start=	\"".$this -> chkr( $liste[ 'visibleT_start' ][ 'ep' ]	)."\"" ; }
+	if ( isset( $liste[ 'visibleT_end'   ][ 'ep' ] ) ) {$SQL .=	"	,visibleT_end	 =	\"".$this -> chkr( $liste[ 'visibleT_end'   ][ 'ep' ]	)."\"" ; }
+  if ( isset( $liste[ 'visibleT'	             ] ) ) {$SQL .=	"	,visibleT	   	 =	\"".$this -> chkr( $liste[ 'visibleT'	             ]	)."\"" ; }
+  if ( isset( $liste[ 'activeT'	               ] ) ) {$SQL .=	"	,activeT	     =	\"".$this -> chkr( $liste[ 'activeT'	             ]	)."\"" ; }
+  if ( isset( $liste[ 'visibleA'	             ] ) ) {$SQL .=	"	,visibleA	   	 =	\"".$this -> chkr( $liste[ 'visibleA'	             ]	)."\"" ; }
+  if ( isset( $liste[ 'activeA'	               ] ) ) {$SQL .=	"	,activeA       =	\"".$this -> chkr( $liste[ 'activeA'	             ]	)."\"" ; }
+  if ( isset( $liste[ 'anonymA'	               ] ) ) {$SQL .=	"	,anonymA       =	\"".$this -> chkr( $liste[ 'anonymA'	             ]	)."\"" ; }
+	if ( isset( $liste[ 'kollHead'	             ] ) ) {$SQL .=	"	,kollHead	     =	\"".$this -> chkr( $liste[ 'kollHead'	             ]	)."\"" ; }
+	if ( isset( $liste[ 'kollInfo'	             ] ) ) {$SQL .=	"	,kollInfo	     =	\"".$this -> chkr( $liste[ 'kollInfo'	             ]	)."\"" ; }
+	if ( isset( $liste[ 'anzSlots'	             ] ) ) {$SQL .=	"	,anzSlots	     =	\"".$this -> chkr( $liste[ 'anzSlots'	             ]	)."\"" ; }
+	if ( isset( $liste[ 'slotDauer'	             ] ) ) {$SQL .=	"	,slotDauer	   =	\"".$this -> chkr( $liste[ 'slotDauer'	           ]	)."\"" ; }
+	if ( isset( $liste[ 'startZeit'	             ] ) ) {$SQL .=	"	,startZeit	   =	\"".$this -> chkr( $liste[ 'startZeit'	           ]	)."\"" ; }
+	if ( isset( $liste[ 'endeZeit'	             ] ) ) {$SQL .=	"	,endeZeit	     =	\"".$this -> chkr( $liste[ 'endeZeit'	             ]	)."\"" ; }
+	if ( isset( $liste[ 'anzStudis'	             ] ) ) {$SQL .=	"	,anzStudis  	 =	\"".$this -> chkr( $liste[ 'anzStudis'	           ]	)."\"" ; }
+                                                     $SQL .=	"	WHERE listID   =	\"".$this -> chkr( $liste[ 'listID'                ]	)."\"" ;
+# deb($SQL,1)  ;
   return  $this -> db -> exec( $SQL );
-	}
-
-	function chkr( $input )
-	{	return  $input ;
 	}
 
 	function deleteListInDB( $liste, $user )
 	{	$SQL ="
 		DELETE FROM LISTEN
-    WHERE  courseID == \"".$liste[ 'courseID' ]."\" AND listID == \"".$liste[ 'listID' ]."\"";
+    WHERE  courseID == \"".$this -> chkr( $liste[ 'courseID' ])."\" AND listID == \"".$this -> chkr( $liste[ 'listID' ])."\"";
 		return  $this -> db -> exec( $SQL );
 	}
 
 //--  Student trägt sich in Liste ein	
-function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB anlegen
+function insertUserInListDB( $user, $listID, $listeOnline )
 { if ( $this -> ifSplit( $listeOnline[ $listID ], $user ) == "true" )
 	{	if ( $listeOnline )
 		foreach ( $listeOnline as $listeOn )
@@ -135,14 +135,14 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	VALUES
 	(  \"".date('d.m.Y  G:i:s')             ."\"
 		,\"". time()                                ."\"
-		,\"". $user['userKennung']                  ."\"
-		,\"". $user['userVorname']                  ."\"
-		,\"". $user['userNachname']                 ."\"
-		,\"". $user['userID']                       ."\"
-		,\"". $user['userEmail']	                  ."\"
-		,\"". $listID                               ."\"
-		,\"". $listID ."". $user['userKennung']     ."\"
-		,\"". $listeOnline[ $listID ]['courseID']   ."\"
+		,\"".$this -> chkr(  $user['userKennung']                )  ."\"
+		,\"".$this -> chkr(  $user['userVorname']                )  ."\"
+		,\"".$this -> chkr(  $user['userNachname']               )  ."\"
+		,\"".$this -> chkr(  $user['userID']                     )  ."\"
+		,\"".$this -> chkr(  $user['userEmail']	                 )  ."\"
+		,\"".$this -> chkr(  $listID                             )  ."\"
+		,\"".$this -> chkr(  $listID ."". $user['userKennung']   )  ."\"
+		,\"".$this -> chkr(  $listeOnline[ $listID ]['courseID'] )  ."\"
  	)
 	";
 	return   $this -> db -> exec( $SQL );
@@ -152,7 +152,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	function deleteUserFromListDB( $user, $listID )                  //--  Student trägt sich aus Liste aus
 	{	$SQL =  "
 		DELETE  FROM USER
-		WHERE kollIDkennung == '". $listID ."".$user[ 'userKennung' ]."'";
+		WHERE kollIDkennung == '".$this -> chkr(  $listID ."".$user[ 'userKennung' ] )."'";
 		return  $this -> db -> exec( $SQL );
 	}
 	
@@ -160,7 +160,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	{ $liste = $_SESSION[ 'currentList' ];
     $listen[ 0 ] = $_SESSION[ 'stdlst' ];
     
-    $SQL 	= "SELECT * FROM LISTEN WHERE courseID = ".$liste[ 'courseID' ]." ORDER by datum ASC";
+    $SQL 	= "SELECT * FROM LISTEN WHERE courseID = ".$this -> chkr( $liste[ 'courseID' ] )." ORDER by datum ASC";
  
     $result =  $this -> db -> query( $SQL );
  
@@ -199,7 +199,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	function isUserInList( $user, $liste )
 	{ $SQL =  "
 		SELECT * FROM USER
-		WHERE kollIDkennung =='". $liste[ 'listID' ] ."".$user[ 'userKennung' ]."' AND courseID = ".$liste[ 'courseID' ];
+		WHERE kollIDkennung =='". $this -> chkr(  $liste[ 'listID' ] ."".$user[ 'userKennung' ] ) . "' AND courseID = ".$liste[ 'courseID' ];
 
 		$result = $this -> db -> query( $SQL );
 		
@@ -212,10 +212,9 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 
 	function getUserList( $liste )
 	{ $userlist =  array();
-    $list = array();
 		$SQL = "
 		SELECT * FROM USER
-		WHERE kolloquiumID == '". $liste[ 'listID' ] ."' AND courseID == '". $liste[ 'courseID' ]."'";
+		WHERE kolloquiumID == '". $this -> chkr( $liste[ 'listID' ] ) ."' AND courseID == '". $this -> chkr( $liste[ 'courseID' ] )."'";
  
 		$result =  $this -> db -> query( $SQL );
 
@@ -229,14 +228,14 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
   
   function ifSplit( $liste  )
 	{ if (isset( $liste[ 'courseID' ] ) )
-    { $SQL = "SELECT * FROM SPLIT WHERE courseID = ". $liste[ 'courseID' ];
+    { $SQL = "SELECT * FROM SPLIT WHERE courseID = ". $this -> chkr(  $liste[ 'courseID' ] );
       $result = $this   -> db -> query( $SQL );
       $split  = $result -> fetchArray();
       if (  isset($split[ 0 ]) && $split[ 0 ] )
       {	return $split[ 0 ];
       }
       else // DB Eintrag besteht noch nocht (z.B init in neuem LR)
-      {	$SQL ="INSERT INTO SPLIT ( split, courseID ) VALUES ( \"true\", ".$liste[ 'courseID' ].")";
+      {	$SQL ="INSERT INTO SPLIT ( split, courseID ) VALUES ( \"true\", ". $this -> chkr( $liste[ 'courseID' ] ).")";
         $this -> db -> exec( $SQL );
       }
     }
@@ -244,11 +243,11 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 
 	function updateIfSplit( $liste )			// Wenn Daten kommen, speicher in Datenbank
 	{	if ( $liste[ 'split' ] == "true" )
-		{	$SQL ="UPDATE SPLIT SET split = \"true\"  WHERE courseID = ".$liste[ 'courseID' ];
+		{	$SQL ="UPDATE SPLIT SET split = \"true\"  WHERE courseID = ". $this -> chkr( $liste[ 'courseID' ]);
  			return  $this->db->exec($SQL );
 		}
 		else if ( $liste[ 'split' ]  == "false" )
-		{	$SQL = "UPDATE SPLIT SET split = \"false\" AND courseID = ".$liste[ 'courseID' ];
+		{	$SQL = "UPDATE SPLIT SET split = \"false\" AND courseID = ".$this -> chkr( $liste[ 'courseID' ]);
  			return  $this->db->exec($SQL );
 		}
 	}
@@ -298,8 +297,7 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 	}
 	
 	function manipuliateUserDB( $kollOnline)
-	{ $liste = $_SESSION[ 'currentList' ];
-    $user  = $_SESSION[ 'currentUser' ];
+	{ $user  = $_SESSION[ 'currentUser' ];
     
 	  $ret = 0;
 	  
@@ -308,8 +306,8 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
 			$listUB			=	 ( isset ($_POST[ 'userbutton'	] )) ?  trim( $_POST[ 'userbutton' ]) : '' ;
 			$listID			=  ( isset ($_POST[ 'listID'	    ] )) ?		    $_POST[ 'listID'		 ]  : '' ;
  
-			if	   	( $listUB	==	'In diese Liste eintragen'   )  { $this -> insertUserInListDB( $user, $listID , $kollOnline);       $ret = 1; }
-			else if ( $listUB	==	'Aus dieser Liste austragen' )	{ $this -> deleteUserFromListDB( $user, $listID );	    	          $ret = 2;	}
+			if	   	( $listUB	==	'In diese Liste eintragen'   )  { $this -> insertUserInListDB(   $user, $listID , $kollOnline);  $ret = 1; }
+			else if ( $listUB	==	'Aus dieser Liste austragen' )	{ $this -> deleteUserFromListDB( $user, $listID              );  $ret = 2;	}
 		}
 		return $ret;
   }
@@ -364,5 +362,13 @@ function insertUserInListDB( $user, $listID, $listeOnline )// Neuer Satz in DB a
     
     return ( $this -> epoc2Date(  strtotime( $date ) ) );
   }
+  
+  function chkr( $input )
+  {
+   return  SQLite3::escapeString( $input ) ;
+ 
+  }
+  
+  
 }
 ?>

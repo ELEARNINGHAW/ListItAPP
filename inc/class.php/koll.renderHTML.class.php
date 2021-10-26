@@ -110,24 +110,19 @@ class RenderHTML
     foreach ($listen as $liste )
 		{ if (  $liste['listID']  != 0)
       {
-        {
-          #if( $liste['visibleA'] == "online" )  { $online = "background:#FFF";  	}
-		
-			if ( $currListe['listID'] == $liste['listID'] )
-			{	 $st2 = 'curLine';
-        #$st1 = ' style="border-top: 1px solid black; border-bottom: 1px solid black;  padding: 3px;"';
-			}
-			else 
-			{ $st2 = 'allLine';
-   
-			}
-			$tmp .= '<tr><td class="koll ' .$st2. ' ">'
+        { if ( $currListe['listID'] == $liste['listID'] )
+			   { $st2 = 'curLine';
+         }
+			   else
+			   { $st2 = 'allLine';
+         }
+			   $tmp .= '<tr><td class="koll ' .$st2. ' ">'
 			  .'<a class="koll" href="?listID=' .$liste['listID']. '">'
         ."<img alt=\"anonym\" style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'anonym'  ][$liste['anonymL'  ]]. "\"  />"
         ."<img alt=\"gesperrt\" style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'lock'    ][$liste['activeL'  ]]. "\"  />"
         ."<img alt=\"sichtbar\" style=\"top: 3px; position: relative;\"  height=\"15px\" width=\"15px\" src=\"".$_SESSION[ 'svg' ][ 'visible' ][$liste['visibleL' ]]. "\"  />"
         .$liste[ 'datum' ][ 'd1' ].' '.$liste['kollHead'].'</td></a></tr>';
-      }
+        }
       }
     }
     

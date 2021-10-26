@@ -17,7 +17,7 @@ $render			= new RenderHTML();
 
 $error 			= $Li -> checkHost(); 												// -- Zugriff auf diese Seite nur von registrierten Refferer
 $user			  = $Li -> decodeAuthData();											//
-$listen			= $db -> getListenData( $Li   );			// -- Array mit allen Kolloquien mit Status 'online'
+$listen			= $db -> getListenData( $Li   );			// -- Array mit allen Listen mit Status 'online'
 
 foreach ( $listen as $liste )
 {	if ( $liste[ 'listID' ] == $_GET[ 'ID' ] )

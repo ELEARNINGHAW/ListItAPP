@@ -432,18 +432,7 @@ class Liste
   }
   
   function checkHost()
-  {  #print_r($_SERVER);
-    /*
-     $host1 = explode('/', $_SERVER[HTTP_REFERER]);
-     if
-     (    ($host1[2] != "www.emil.haw-hamburg.de"	    )
-       && ($host1[2] != "lernserver.el.haw-hamburg.de" )
-       && ($host1[2] != "localhost"						        )
-       && ($host1[2] != "141.22.110.70"					    	)
-     )
-     {	die("<div style='text-align:center;'><h1>ACCESS ERROR<h1></div>");
-     }
-     */
+  {
   }
   
 }
